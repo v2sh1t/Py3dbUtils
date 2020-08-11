@@ -14,6 +14,9 @@ class SQLObject(object):
     def CreateTable(self, table_name, col_prop_list):
         pass
 
+    def ExecScript(self, sql_script):
+        pass
+    
     def ExecInsert(self, table_name, col_list, value_list):
         pass
 
@@ -76,7 +79,18 @@ class MSSQL(SQLObject):
         cur.execute(sql)
         self.conn.commit()
         # self.conn.close()
-
+       
+    def ExecScript(self, sql_script):
+        """
+        执行sql语句
+        :param sql_script: sql语句
+        :return res_list: 结果列表
+        """
+        cur = self.GetConnect()
+        cur.execute(sql_script)
+        res_list = cur.fetchall()
+        return res_list
+    
     def ExecQuery(self, col_list, table_name, condition=None):
         """
         查询数据
@@ -188,6 +202,17 @@ class SQLITE(SQLObject):
         cur.execute(sql)
         self.conn.commit()
         # self.conn.close()
+    
+    def ExecScript(self, sql_script):
+        """
+        执行sql语句
+        :param sql_script: sql语句
+        :return res_list: 结果列表
+        """
+        cur = self.GetConnect()
+        cur.execute(sql_script)
+        res_list = cur.fetchall()
+        return res_list
 
     def ExecQuery(self, col_list, table_name, condition: str = None):
         """
